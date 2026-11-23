@@ -10,6 +10,8 @@ spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
 spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
+jwt.secret=${JWT_SECRET}
+
 razorpay.api.key=${RAZORPAY_API_KEY}
 razorpay.api.sercet=${RAZORPAY_API_SECRET}
 

@@ -1,6 +1,9 @@
 package com.priyanshu.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,16 +15,22 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import javax.crypto.SecretKey;
 
 @Configuration
 public class AppConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    SecretKey jwtSigningKey(@Value("${jwt.secret}") String encodedSecret) {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(encodedSecret));
+    }
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http, SecretKey jwtSigningKey) throws Exception{
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorizae-> Authorizae.requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
-                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidator(jwtSigningKey), BasicAuthenticationFilter.class)
                 .csrf(csrf->csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();

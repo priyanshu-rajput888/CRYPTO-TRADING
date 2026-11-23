@@ -16,9 +16,12 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtProvider jwtProvider;
+
     @Override
     public User findUserProfileByJwt(String jwt) throws Exception {
-        String email = JwtProvider.getEmailFromToken(jwt);
+        String email = jwtProvider.getEmailFromToken(jwt);
         User user = userRepository.findByEmail(email);
 
         if(user == null)

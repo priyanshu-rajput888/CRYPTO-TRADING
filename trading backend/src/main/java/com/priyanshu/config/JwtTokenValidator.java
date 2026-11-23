@@ -2,7 +2,6 @@ package com.priyanshu.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,11 +15,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
+    private final SecretKey key;
+
+    public JwtTokenValidator(SecretKey key) {
+        this.key = key;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader(JwtConstant.JWT_HEADER);
@@ -29,8 +33,6 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             jwt = jwt.substring(7);
 
             try{
-                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
-
                 Claims claims = Jwts.parser()
                         .verifyWith(key)
                         .build()

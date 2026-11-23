@@ -41,6 +41,9 @@ public class AuthController {
     @Autowired
     private WatchlistService watchlistService;
 
+    @Autowired
+    private JwtProvider jwtProvider;
+
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> register(@RequestBody User user) throws Exception {
 
@@ -64,7 +67,7 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        String jwt = JwtProvider.generateToken(auth);
+        String jwt = jwtProvider.generateToken(auth);
 
         AuthResponse res = new AuthResponse();
         res.setJwt(jwt);
@@ -84,7 +87,7 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        String jwt = JwtProvider.generateToken(auth);
+        String jwt = jwtProvider.generateToken(auth);
 
         User authUser = userRepository.findByEmail(userName);
 
