@@ -1,0 +1,12 @@
+.authContainer{
+    background-image: url("https://picjumbo.com/wp-content/uploads/glowing-bitcoin-logo-ready-to-explode-free-photo.jpeg");
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.bgBlure{
+    backdrop-filter: blure(10px);
+}
