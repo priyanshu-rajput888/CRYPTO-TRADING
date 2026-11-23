@@ -10,3 +10,5 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
+# Secrets (ignore Spring properties containing credentials)
+application.properties
